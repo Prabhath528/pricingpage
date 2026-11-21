@@ -17,7 +17,6 @@ tick();setInterval(tick,1000);
 /* hero: Christmas photo + animated tree */
 var hero=document.getElementById('hero'),bg=document.querySelector('.hx2-bg');
 if(hero){
- if(bg){var o=bg.src;bg.onerror=function(){bg.onerror=null;bg.src=o};bg.src='https://images.unsplash.com/photo-1512389142860-9c449e58a543?auto=format&fit=crop&w=1800&q=70'}
  hero.insertAdjacentHTML('beforeend','<svg class="xtree" viewBox="0 0 120 150" aria-hidden="true"><polygon points="60,10 95,60 25,60" fill="#1f8a4c"/><polygon points="60,35 105,95 15,95" fill="#23a05a"/><polygon points="60,65 115,130 5,130" fill="#2bb866"/><rect x="52" y="130" width="16" height="20" fill="#8b5a2b"/><polygon points="60,0 63,8 72,8 65,13 68,22 60,17 52,22 55,13 48,8 57,8" fill="#ffd66b"/><circle class="bl" cx="60" cy="48" r="4" fill="#ff4d5e"/><circle class="bl" cx="45" cy="78" r="4" fill="#ffd66b"/><circle class="bl" cx="76" cy="82" r="4" fill="#5aa9ff"/><circle class="bl" cx="30" cy="112" r="4" fill="#ff4d5e"/><circle class="bl" cx="60" cy="104" r="4" fill="#fff"/><circle class="bl" cx="92" cy="114" r="4" fill="#ffd66b"/></svg>');
 }
 /* snowfall */
