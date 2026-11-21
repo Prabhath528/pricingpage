@@ -47,6 +47,8 @@ var plans=[
  {id:'custom',name:'Custom Web',tag:'Tailored',g:'g4',price:17000,ref:20000,fee:2000,from:true,pages:'Scope agreed in writing',who:'Custom web applications and advanced requirements.',
   feats:['Custom UI / UX','Custom database structure','Advanced admin dashboard','Multiple user roles where agreed','Custom functionality and workflows','API integrations where agreed','Advanced search and filters','Backup and recovery setup','Deployment and configuration']}
 ];
+var END=new Date('2026-12-31T23:59:59+05:30').getTime(), offer=Date.now()<END;
+if(!offer)plans.forEach(function(p){p.price=p.ref});   /* after the offer: regular prices */
 var W='fill="#fff"',B='fill="#1d5bff"',G='fill="#cfd9ee"';
 var art={
  mini:'<svg viewBox="0 0 100 90"><rect x="22" y="6" width="62" height="78" rx="9" '+W+'/><rect x="32" y="18" width="30" height="7" rx="3.5" '+B+'/><rect x="32" y="33" width="42" height="5" rx="2.5" '+G+'/><rect x="32" y="44" width="36" height="5" rx="2.5" '+G+'/><rect x="32" y="60" width="28" height="14" rx="6" fill="#16a34a"/></svg>',
@@ -60,7 +62,7 @@ var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){ret
 var ic=function(n){return '<svg class="i"><use href="#i-'+n+'"/></svg>'};
 var lkr=function(n){return 'LKR '+n.toLocaleString('en-US')};
 var priceOf=function(p){return (mode==='once'?(p.from?'From ':''):(p.from?'From ':''))+lkr(mode==='once'?p.price:p.fee)};
-var msg=function(p){return "Hello, I'm interested in the "+p.name+' package ('+(p.from?'from ':'')+lkr(p.price)+'). Could you tell me the next steps?'};
+var msg=function(p){return "Hello, I'm interested in the "+p.name+(offer?' Christmas offer':'')+' package ('+(p.from?'from ':'')+lkr(p.price)+'). Could you tell me the next steps?'};
 var wa=function(p){return 'https://wa.me/'+PHONE+'?text='+encodeURIComponent(p?msg(p):"Hello, I'm interested in starting a project with you!")};
 var mail=function(p){return 'mailto:'+MAIL+'?subject='+encodeURIComponent(p?'Project enquiry: '+p.name+' package':'Project enquiry')+'&body='+encodeURIComponent((p?msg(p):'Hello, I would like to discuss a project.')+'\n\nMy name:\nMy business:\n')};
 var tel='tel:+'+PHONE.replace(/^94/,'94');
@@ -73,7 +75,7 @@ var box=$('#cards');
 if(box){
 box.innerHTML=plans.map(function(p){
   var shown=p.feats.slice(0,6), rest=p.feats.length-shown.length;
-  return '<article class="card rv" data-id="'+p.id+'"><div class="top '+p.g+'"><span class="tag">'+p.tag+'</span><div class="art">'+art[p.id]+'</div><div><div class="ref">Was '+lkr(p.ref)+'</div><div class="price" data-p="'+p.id+'"></div><small class="unit" style="color:var(--mut);font-size:.8rem"></small></div></div>'+
+  return '<article class="card rv" data-id="'+p.id+'"><div class="top '+p.g+'"><span class="tag">'+p.tag+'</span>'+(offer?'<span class="xo">Christmas offer</span>':'')+'<div class="art">'+art[p.id]+'</div><div><div class="ref">'+(offer?'Regular price '+lkr(p.ref):'')+'</div><div class="price" data-p="'+p.id+'"></div><small class="unit" style="color:var(--mut);font-size:.8rem"></small></div></div>'+
   '<div class="body"><p class="for">'+p.who+'</p><button class="btn" data-sel="'+p.id+'" type="button" aria-pressed="false">Select plan</button><button class="lnk" data-view="'+p.id+'" type="button">View details</button>'+
   '<ul>'+shown.map(function(f){return '<li>'+ic('check')+f+'</li>'}).join('')+'</ul>'+(rest?'<span class="more">+ '+rest+' more included</span>':'')+'</div></article>';
 }).join('');
@@ -107,7 +109,7 @@ $('#dClear').addEventListener('click',function(){sel=null;refresh()});
 var dlg=$('#dlg');
 function openPlan(id){
   var p=plans.find(function(x){return x.id===id});
-  dlg.innerHTML='<div class="dh top '+p.g+'" style="border-radius:0;animation:none"><button class="x" type="button" data-close aria-label="Close">'+ic('x')+'</button><span class="tag">'+p.tag+'</span><h3 id="dtitle">'+p.name+'</h3><div class="ref">Previous reference price: '+lkr(p.ref)+'</div><div class="price">'+(p.from?'From ':'')+lkr(p.price)+' <small>starting price</small></div><small style="color:var(--ink)">Maintenance: '+(p.from?'from ':'')+lkr(p.fee)+' / month, first month free</small></div>'+
+  dlg.innerHTML='<div class="dh top '+p.g+'" style="border-radius:0;animation:none"><button class="x" type="button" data-close aria-label="Close">'+ic('x')+'</button><span class="tag">'+p.tag+'</span><h3 id="dtitle">'+p.name+'</h3>'+(offer?'<div class="ref">Regular price after the offer: '+lkr(p.ref)+'</div>':'')+'<div class="price">'+(p.from?'From ':'')+lkr(p.price)+' <small>starting price</small></div><small style="color:var(--ink)">Maintenance: '+(p.from?'from ':'')+lkr(p.fee)+' / month, first month free</small></div>'+
   '<div class="db"><p>'+p.who+' <strong>'+p.pages+'.</strong></p><div class="two"><div><h4>What is included</h4><ul>'+p.feats.map(function(f){return '<li>'+ic('check')+f+'</li>'}).join('')+'</ul></div>'+
   '<div><h4>Not included</h4><ul>'+notIncluded.map(function(f){return '<li class="no">'+ic('dash')+f+'</li>'}).join('')+'</ul><h4 style="margin-top:18px">Payment</h4><ul><li>'+ic('check')+'50% advance before work starts</li><li>'+ic('check')+'50% before final handover</li></ul></div></div>'+
   (p.from?'<p style="color:var(--mut);font-size:.9rem">Custom Web is a starting price. The final price depends on the written scope and quotation.</p>':'')+
@@ -173,6 +175,7 @@ var terms=[
   'You can ask us to correct your information and ask about data retention.',
   'Card details and sensitive payment credentials are never stored.']]
 ];
+if(offer)terms[0][2].push('Christmas offer prices are valid until 31 December 2026, 11:59 PM (Sri Lanka time). After that date, regular prices apply.');
 var tg=$('#tgrid');if(tg)tg.innerHTML=terms.map(function(t){return '<article class="tc rv"><h3><span>'+ic(t[0])+'</span>'+t[1]+'</h3><ul>'+t[2].map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></article>'}).join('');
 
 /* rotating word */
